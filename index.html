@@ -1,0 +1,1959 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description"
+    content="A joint workshop for egocentric computer vision from EPIC, Ego4D, HBHA, and Aria." />
+  <meta name="keywords" content="video dataset, machine perception, machine-learning, research, egocentric videos, ego4d, epic-kitchens" />
+
+  <title>First Joint Egocentric Vision Workshop</title>
+  <link rel="preconnect" href="https://use.fontawesome.com" />
+  <link rel="preconnect" href="https://maxcdn.bootstrapcdn.com" />
+  <link rel="preconnect" href="https://ajax.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link rel="preconnect" href="https://assets.ego4d-data.org" />
+
+  <link rel="stylesheet" href="assets/css/style.css" />
+
+  <link rel="preload" as="image" href="assets/images/ego-4d-01.png" />
+  <link rel="preload" as="image" href="assets/images/map.jpg"
+    media="screen and (max-width: 1024px), (max-height:511px)" />
+
+  <link rel="icon" href="assets/images/egovis-logo.ico" />
+
+  <!-- Latest font-awesome css for icons -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+    integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous" />
+
+  <!-- BS3 compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- Latest compiled JavaScript for BS3 -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <script src="assets/scripts/form-submission.js"></script>
+
+  <script type="text/javascript">
+    function openTabbedContent(element) {
+      var whereTo = $(element).attr("goto"),
+        tabs = $("#benchmarks li"),
+        links = tabs.find("a[href='#" + whereTo + "']");
+
+      links[0].click();
+    }
+    // Hide the address bar
+    // https://24ways.org/2011/raising-the-bar-on-mobile/
+    // https://github.com/scottjehl/Hide-Address-Bar
+    /*
+     * Normalized hide address bar for iOS & Android
+     * (c) Scott Jehl, scottjehl.com
+     * MIT License
+     */
+    (function (win) {
+      var doc = win.document;
+
+      // If there's a hash, or addEventListener is undefined, stop here
+      if (
+        !win.navigator.standalone &&
+        !location.hash &&
+        win.addEventListener
+      ) {
+        //scroll to 1
+        win.scrollTo(0, 1);
+        var scrollTop = 1,
+          getScrollTop = function () {
+            return (
+              win.pageYOffset ||
+              (doc.compatMode === "CSS1Compat" &&
+                doc.documentElement.scrollTop) ||
+              doc.body.scrollTop ||
+              0
+            );
+          },
+          //reset to 0 on bodyready, if needed
+          bodycheck = setInterval(function () {
+            if (doc.body) {
+              clearInterval(bodycheck);
+              scrollTop = getScrollTop();
+              win.scrollTo(0, scrollTop === 1 ? 0 : 1);
+            }
+          }, 15);
+
+        win.addEventListener(
+          "load",
+          function () {
+            setTimeout(function () {
+              //at load, if user hasn't scrolled more than 20 or so...
+              if (getScrollTop() < 20) {
+                //reset to hide addr bar at onload
+                win.scrollTo(0, scrollTop === 1 ? 0 : 1);
+              }
+            }, 0);
+          },
+          false
+        );
+      }
+    })(this);
+  </script>
+</head>
+
+<body>
+  <header>
+    <nav id="nav-bar" class="navbar nav-dropdown navbar-expand-lg">
+      <div id="nav-links" class="container-fluid">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav-menu"
+          aria-controls="nav-menu" aria-expanded="false" aria-label="Toggle navigation">
+          <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
+
+        <div id="nav-logo">
+          <a href="#">
+            <img id="logo" src="assets/images/egovis-logo.png" alt="Logo" />
+          </a>
+        </div>
+        <div id="nav-menu" class="collapse">
+          <ul id="nav-menu-list" data-app-modern-menu="true">
+            <li class="nav-item">
+              <a href="#overview" class="nav-link">Overview</a>
+            </li>
+            <li class="nav-item">
+              <a href="#challenges" class="nav-link">Challenges</a>
+            </li>
+            <li class="nav-item">
+              <a href="#winners" class="nav-link">Winners</a>
+            </li>
+            <li class="nav-item">
+              <a href="#cfp" class="nav-link">Call for Abstracts</a>
+            </li>
+            <li class="nav-item">
+              <a href="#impdates" class="nav-link">Important Dates</a>
+            </li>
+            <li class="nav-item">
+              <a href="#program" class="nav-link">Program</a>
+            </li>
+            <li class="nav-item">
+              <a href="#papers" class="nav-link">Papers</a>
+            </li>
+            <li class="nav-item">
+              <a href="#invited" class="nav-link">Invited Speakers</a>
+            </li>
+            <li class="nav-item">
+              <a href="#organisers" class="nav-link">Organisers</a>
+            </li>
+            <li class="nav-item">
+              <a href="#pastevents" class="nav-link">Past Events</a>
+            </li>
+          </ul>
+        </div>
+        <div id="discover"></div>
+      </div>
+    </nav>
+  </header>
+
+  <section id="intro">
+    <div class="container">
+      <div >
+        <div id="tab-header" class="align-center">
+          <h3 class="title no-margin title1">First Joint Egocentric Vision (EgoVis) Workshop</h3>
+          <h4 class="title no-margin title2">Held in Conjunction with CVPR 2024</h4>
+          <h5 class="title no-margin title3">17 June 2024 - Seattle, USA</h5>
+          <h5 class="title no-margin title3">Room: Summit 428</h5>
+          
+          <p class="sub-title slide-text">
+            This joint workshop aims to be the focal point for the egocentric computer vision 
+            community to meet and discuss progress in this fast growing research area, addressing
+            egocentric vision in a comprehensive manner including key research challenges in video 
+            understanding, multi-modal data, interaction learning, self-supervised learning, AR/VR with 
+            applications to cognitive science and robotics.
+          </p>
+            
+            
+            <!--This joint workshop aims to be the focal point for the egocentric com- puter vision community to meet and discuss progress in this fast growing research area. The workshop is a collaboration between <a href="https://epic-workshop.org/EPIC_CVPR23/submission">EPIC Workshop</a>, <a href='https://ego4d-data.org/workshops/cvpr23/'>Ego4D Workshop</a>, <a href="https://sites.google.com/view/egocentric-hand-body-activity">HBHA Workshop</a>, and <a href="https://ariatutorial2023.github.io">Aria Tutorial</a>.</p>-->
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section id="overview">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 align-center">
+          <h3 class="title large-text">Overview</h3>
+        </div>
+      </div>
+      <p class="justified">
+        Wearable cameras, smart glasses, and AR/VR headsets are gaining importance for research and commercial use. They feature various sensors like cameras, depth sensors, microphones, IMUs, and GPS. Advances in machine perception enable precise user localization (SLAM), eye tracking, and hand tracking. This data allows understanding user behavior, unlocking new interaction possibilities with augmented reality. Egocentric devices may soon automatically recognize user actions, surroundings, gestures, and social relationships. These devices have broad applications in assistive technology, education, fitness, entertainment, gaming, eldercare, robotics, and augmented reality, positively impacting society.
+      </p>
+
+      <p>
+        Previously, research in this field faced challenges due to limited datasets in a data-intensive environment. However, the community's recent efforts have addressed this issue by releasing numerous large-scale datasets covering various aspects of egocentric perception, including HoloAssist, Aria Digital Twin, Aria Synthetic Environments, Ego4D, Ego-Exo4D, and EPIC-KITCHENS.
+<section>
+  <div class="container">
+    <div class="row card-row">
+      <div class="col-xs-12 col-sm-4 col-lg-4 card-block">
+        <a href="https://holoassist.github.io" class="block" target="_blank"
+          rel="noopener noreferrer">
+          <div class="card-content">
+            <div class="card-image">
+              <img src="assets/images/Hololens.png" alt="Hololens 2 Image" />
+            </div>
+            <div class="card-info">
+              <h3 class="card-title">HoloAssist</h3>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col-xs-12 col-sm-4 col-lg-4 card-block">
+        <a href="https://www.projectaria.com/datasets/adt" class="block" target="_blank"
+          rel="noopener noreferrer">
+          <div class="card-content">
+            <div class="card-image">
+              <img src="assets/images/adt.png" alt="Aria Digital Twin" />
+            </div>
+            <div class="card-info">
+              <h3 class="card-title">Aria Digital Twin</h3>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col-xs-12 col-sm-4 col-lg-4 card-block">
+        <a href="https://www.projectaria.com/datasets/ase" class="block" target="_blank"
+          rel="noopener noreferrer">
+          <div class="card-content">
+            <div class="card-image">
+              <img src="assets/images/ase.png" alt="Aria Synthetic Environments" />
+            </div>
+            <div class="card-info">
+              <h3 class="card-title">Aria Synthetic Environments</h3>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col-xs-12 col-sm-4 col-lg-4 card-block">
+        <a href="https://ego-exo4d-data.org" class="block" target="_blank"
+          rel="noopener noreferrer">
+          <div class="card-content">
+            <div class="card-image">
+              <img src="https://ego-exo4d-data.org/assets/images/ego-exo4d-logo.png" alt="Ego-Exo4D Logo" />
+            </div>
+            <div class="card-info">
+              <h3 class="card-title">Ego-Exo4D</h3>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col-xs-12 col-sm-4 col-lg-4 card-block">
+        <a href="https://ego4d-data.org" class="block" target="_blank"
+          rel="noopener noreferrer">
+          <div class="card-content">
+            <div class="card-image">
+              <img src="https://ego4d-data.org/assets/images/ego-4d-01.png" alt="Ego4D Logo" />
+            </div>
+            <div class="card-info">
+              <h3 class="card-title">Ego4D</h3>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col-xs-12 col-sm-4 col-lg-4 card-block">
+        <a href="http://epic-kitchens.github.io/" class="block" target="_blank"
+          rel="noopener noreferrer">
+          <div class="card-content">
+            <div class="card-image">
+              <img src="assets/images/epic.svg" alt="EPIC-Kitchens Logo" />
+            </div>
+            <div class="card-info">
+              <h3 class="card-title">EPIC-Kitchens</h3>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- <ul class="cfp">
+  <li><a href="http://epic-kitchens.github.io" target="_blank">EPIC-KITCHENS</a>, a large-scale dataset of egocentric videos including 100 hours of audio-visual, non-scripted recordings in 45 native environments and 4 different cities, capturing all daily activities in the kitchen over multiple days. </li>
+  <li><a href="https://ego-exo4d-data.org" target="_blank">EGO-EXO4D</a>, a diverse, large-scale multi-modal, multi-view, video dataset and benchmark collected across 13 cities worldwide by 839 camera wearers, capturing 1422 hours of video of skilled human activities.</a></li>
+  <li><a href="https://ego4d-data.org" target="_blank">Ego4D</a>, a massive egocentric video dataset containing 3,600+ hours of daily-life activity video spanning hundreds of scenarios (house-hold, outdoor, workplace, leisure, etc.) captured by 850+ unique camera wearers from 74 worldwide locations and 9 different countries.</li>
+  <li><a href="http://holoassist.github.io" target="_blank">HoloAssist</a>, a new large-scale egocentric dataset with eight heterogeneous modalities in an interactive, assistive task completion setting. This dataset captures the complication of interaction in assistive technologies and highlights important challenges like timely intervention and mistake detection in Mixed Reality applications.  HoloAssist offers 169 hours of data with 8 modalities (RGB, depth, head pose, 3D hand pose, eye gaze, audio, IMU, and text) captured by 220+ unique participants with diverse backgrounds. 
+  <li><a href="https://www.projectaria.com/datasets/adt/" target="_blank">Aria Digital Twin</a>, an egocentric dataset captured using Aria glasses, with extensive simulated ground truth for devices, objects and environment. This dataset sets a new standard for egocentric machine perception research, and accelerates research into a number of challenges including 3D object detection and tracking, scene reconstruction and understanding, sim-to-real learning, human pose prediction, while also inspiring new machine perception tasks for AR applications.</li>
+  <li><a href="https://www.projectaria.com/datasets/ase/" target="_blank">Aria Synthetic Environments</a>, a synthetic dataset generated from procedurally designed interior layouts filled with 3D objects, simulated to match the sensor characteristics of Aria glasses. In contrast to previous datasets for 3D scene understanding, often insufficient for ML training, the Aria Synthetic Environments Dataset establishes a new standard for the scale of indoor environment datasets. This opens up exciting research possibilities for tasks like 3D scene reconstruction, object detection, and tracking.</li>
+</ul> -->
+      </p>
+
+      <p>
+        The goal of this workshop is to provide an exciting discussion forum for researchers working in this challenging and fast-growing area, and to provide a means to unlock the potential of data-driven research with our datasets to further the state-of-the-art. 
+      </p>
+    </div>
+  </section>
+
+  <section id="challenges">
+    <div class="container">
+      <div class="row card-row">
+        <div class="col-xs-12 align-center">
+          <h3 class="title large-text">Challenges</h3>
+        </div>
+        <p>We welcome submissions to the challenges from March to May (see <a href="#impdates">important dates</a>) through the leaderboards linked below.
+        Participants to the challenges are are requested to submit a technical report on their method. 
+        This is a requirement for the competition. Reports should be 2-6 pages including references. 
+        Submissions should use <a target="_blank" href="https://github.com/cvpr-org/author-kit/releases/tag/CVPR2024-v2">the CVPR format</a> and should be submitted through the <a target="_blank" href="https://cmt3.research.microsoft.com/EgoVis2024/">CMT website</a>.</p>
+        <h4 class="title2">HoloAssist Challenges</h4>
+      <table class="dates-table">
+        <thead>
+            <tr>
+                <th>Challenge ID</th>
+                <th>Challenge Name</th>
+                <th>Challenge Lead</th>
+                <th>Challenge Link</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Action Recognition</td>
+                <td>Mahdi Rad, Microsoft, Switzerland</td>
+                <td><a href="https://www.codabench.org/competitions/2611/" target="_blank">Link</a></td>
+            <tr>
+                <td>2</td>
+                <td>Mistake Detection</td>
+                <td>Ishani Chakraborty, Microsoft, US</td>
+                <td><a href="https://www.codabench.org/competitions/2613/" target="_blank">Link</a></td>
+            <tr>
+                <td>3</td>
+                <td>Intervention Type Prediction</td>
+                <td>Taein Kwon, ETH Zurich, Switzerland</td>
+                <td><a href="https://www.codabench.org/competitions/2612/" target="_blank">Link</a></td>
+          </tbody>
+      </table>
+      <h4 class="title2">Aria Digital Twin Challenges</h4>
+      <table class="dates-table">
+        <thead>
+            <tr>
+                <th>Challenge ID</th>
+                <th>Challenge Name</th>
+                <th>Challenge Lead</th>
+                <th>Challenge Link</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Few-shots 3D Object detection & tracking</td>
+                <td>Xiaqing Pan, Meta, US</td>
+                <td><a href="https://eval.ai/web/challenges/challenge-page/2093/overview" target="_blank">Link</a></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>3D Object detection & tracking</td>
+                <td>Xiaqing Pan, Meta, US</td>
+                <td><a href="https://eval.ai/web/challenges/challenge-page/2093/overview" target="_blank">Link</a></td>
+            </tr>
+          </tbody>
+      </table>
+
+      <h4 class="title2">Aria Synthetic Environments Challenges</h4>
+      <table class="dates-table">
+        <thead>
+            <tr>
+                <th>Challenge ID</th>
+                <th>Challenge Name</th>
+                <th>Challenge Lead</th>
+                <th>Challenge Link</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Scene Reconstruction using structured language</td>
+                <td>Vasileios Baltnas, Meta, UK</td>
+                <td><a href="https://eval.ai/web/challenges/challenge-page/2115/overview" target="_blank">Link</a></td>
+            </tr>
+          </tbody>
+      </table>
+        
+        <h4 class="title2">Ego4D Challenges</h4>
+        <p>Ego4D is a massive-scale, egocentric dataset and benchmark suite collected across 
+          74 worldwide locations and 9 countries, with over 3,670 hours of daily-life activity 
+          video. Please find details below on our challenges:
+        </p>
+        <table class="dates-table">
+          <thead>
+              <tr>
+                  <th>Challenge ID</th>
+                  <th>Challenge Name</th>
+                  <th>Challenge Lead</th>
+                  <th>Challenge Link</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <td>1</td>
+                  <td>Visual Queries 2D</td>
+                  <td>Santhosh Kumar Ramakrishnan, University of Texas, Austin, US</td>
+                  <td><a target="_blank" href="https://eval.ai/web/challenges/challenge-page/1843/overview">Link</a></td>
+              </tr>
+              <tr>
+                  <td>2</td>
+                  <td>Visual Queries 3D</td>
+                  <td>Vincent Cartillier, Georgia Tech, US</td>
+                  <td><a target="_blank" href="https://eval.ai/web/challenges/challenge-page/1646/overview">Link</a></td>
+              </tr>
+              <tr>
+                  <td>3</td>
+                  <td>Natural Language Queries</td>
+                  <td>Satwik Kottur, Meta, US</td>
+                  <td><a target="_blank" href="https://eval.ai/web/challenges/challenge-page/1629/overview">Link</a></td>
+              </tr>
+              <tr>
+                  <td>4</td>
+                  <td>Moment Queries</td>
+                  <td>Chen Zhao & Merey Ramazanova, KAUST, SA</td>
+                  <td><a target="_blank" href="https://eval.ai/web/challenges/challenge-page/1626/overview">Link</a></td>
+              </tr>
+              <tr>
+                  <td>5</td>
+                  <td>EgoTracks</td>
+                  <td>Hao Tang & Weiyao Wang, Meta, US</td>
+                  <td><a target="_blank" href="https://eval.ai/web/challenges/challenge-page/1969/overview">Link</a></td>
+              </tr>
+              <tr>
+                <td>6</td>
+                <td>Goal Step</td>
+                <td>Yale Song, Meta, US</td>
+                <td><a target="_blank" href="https://eval.ai/web/challenges/challenge-page/2188/overview">Link</a></td>
+              </tr>
+              <tr>
+                  <td>7</td>
+                  <td>Ego Schema</td>
+                  <td>Karttikeya Mangalam, Raiymbek Akshulakov, UC Berkeley, US</td>
+                  <td><a target="_blank" href="https://eval.ai/web/challenges/challenge-page/2238/overview">Link</a></td>
+              </tr>
+              <tr>
+                  <td>8</td>
+                  <td>PNR temporal localization</td>
+                  <td>Yifei Huang, University of Tokyo, JP</td>
+                  <td><a target="_blank" href="https://eval.ai/web/challenges/challenge-page/1622/overview">Link</a></td>
+              </tr>
+              <tr>
+                  <td>9</td>
+                  <td>Localization and Tracking</td>
+                  <td>Hao Jiang, Meta, US</td>
+                  <td><a target="_blank" href="https://eval.ai/web/challenges/challenge-page/1633/overview">Link</a></td>
+              </tr>
+              <tr>
+                  <td>10</td>
+                  <td>Speech Transcription</td>
+                  <td>Leda Sari Jachym Kolar & Vamsi Krishna Ithapu, Meta Reality Labs, US</td>
+                  <td><a target="_blank" href="https://eval.ai/web/challenges/challenge-page/1637/overview">Link</a></td>
+              </tr>
+              <tr>
+                  <td>11</td>
+                  <td>Looking at me</td>
+                  <td>Eric Zhongcong Xu, National University of Singapore, Singapore</td>
+                  <td><a target="_blank" href="https://eval.ai/web/challenges/challenge-page/1624/overview">Link</a></td>
+              </tr>
+              <tr>
+                  <td>12</td>
+                  <td>Short-term Anticipation</td>
+                  <td>Francesco Ragusa, University of Catania, IT</td>
+                  <td><a target="_blank" href="https://eval.ai/web/challenges/challenge-page/1623/overview">Link</a></td>
+              </tr>
+              <tr>
+                  <td>13</td>
+                  <td>Long-term Anticipation</td>
+                  <td>Tushar Nagarajan, FAIR, US</td>
+                  <td><a target="_blank" href="https://eval.ai/web/challenges/challenge-page/1598/overview">Link</a></td>
+              </tr>
+          </tbody>
+      </table>
+      <h4 class="title2">Ego-Exo4D Challenges</h4>
+      <p>Ego-Exo4D is a diverse, large-scale multi-modal multi view video dataset and 
+        benchmark challenge. Ego-Exo4D centers around simultaneously-captured ego-
+        centric and exocentric video of skilled human activities (e.g., sports, music, dance, 
+        bike repair).</p>
+      <table class="dates-table">
+        <thead>
+            <tr>
+                <th>Challenge ID</th>
+                <th>Challenge Name</th>
+                <th>Challenge Lead</th>
+                <th>Challenge Link</th>
+            </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Ego-Pose Body</td>
+            <td>Pablo Arbelaez & Maria Camila Escobar Palomeque, Universidad de los Andes Colombia</td>
+            <td><a target="_blank" href="https://eval.ai/web/challenges/challenge-page/2245/overview">Link</a></td>
+          </tr>
+        </tbody>
+        <tbody>
+          <tr>
+            <td>2</td>
+            <td>Ego-Pose Hands</td>
+            <td>Jianbo Shi, Shan Shu, University of Pennsylvania, US</td>
+            <td><a target="_blank" href="https://eval.ai/web/challenges/challenge-page/2249/overview">Link</a></td>
+          </tr>
+        </tbody>
+      </table>
+      <h4 class="title2">EPIC-Kitchens Challenges</h4>
+      <p>Please check the <a href="https://epic-kitchens.github.io/2024" target="_blank">EPIC-KITCHENS website</a> for more information on the EPIC-KITCHENS challenges.
+      Links to individual challenges are also reported below.</p>
+        <table class="dates-table">
+        <thead>
+            <tr>
+                <th>Challenge ID</th>
+                <th>Challenge Name</th>
+                <th>Challenge Lead</th>
+                <th>Challenge Link</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Action Recognition</td>
+                <td>Jacob Chalk, University of Bristol, UK</td>
+                <td><a href="https://codalab.lisn.upsaclay.fr/competitions/776" target="_blank">Link</a></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Action Anticipation</td>
+                <td>Antonino Furnari and Francesco Ragusa University of Catania, IT</td>
+                <td><a href="https://codalab.lisn.upsaclay.fr/competitions/702" target="_blank">Link</a></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Action Detection</td>
+                <td>Francesco Ragusa and Antonino Furnari, University of Catania, IT</td>
+                <td><a href="https://codalab.lisn.upsaclay.fr/competitions/707" target="_blank">Link</a></td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Domain Adaptation for Action Recognition</td>
+                <td>Toby Perrett, University of Bristol, UK</td>
+                <td><a href="https://codalab.lisn.upsaclay.fr/competitions/1241" target="_blank">Link</a></td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>Multi-Instance Retrieval</td>
+                <td>Michael Wray, University of Bristol, UK</td>
+                <td><a href="https://codalab.lisn.upsaclay.fr/competitions/617" target="_blank">Link</a></td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>Semi-Supervised Video-Object Segmentation</td>
+                <td>Ahmad Dar Khalil, University of Bristol, UK</td>
+                <td><a href="https://codalab.lisn.upsaclay.fr/competitions/9767" target="_blank">Link</a></td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>Hand-Object Segmentation</td>
+                <td>Dandan Shan, University of Michigan, US</td>
+                <td><a href="https://codalab.lisn.upsaclay.fr/competitions/9969" target="_blank">Link</a></td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>EPIC-SOUNDS Audio-Based Interaction Recognition</td>
+                <td>Jacob Chalk, University of Bristol, UK</td>
+                <td><a href="https://codalab.lisn.upsaclay.fr/competitions/9729" target="_blank">Link</a></td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td>TREK-150 Object Tracking</td>
+              <td>Matteo Dunnhofer, University of Udine, IT</td>
+              <td><a href="https://codalab.lisn.upsaclay.fr/competitions/9597" target="_blank">Link</a></td>
+          </tr>
+          <tr>
+            <td>10</td>
+            <td>EPIC-SOUNDS Audio-Based Interaction Detection</td>
+            <td>Jacob Chalk, University of Bristol, UK</td>
+            <td><a href="https://codalab.lisn.upsaclay.fr/competitions/17921" target="_blank">Link</a></td>
+          </tr>
+
+            
+          </tbody>
+      </table>
+      
+      
+      </div>
+    </div>
+  </section>
+
+  <section id="winners">
+    <div class="container">
+      <div class="row card-row">
+        <div class="col-xs-12 align-center">
+          <h3 class="title large-text">Winners</h3>
+        </div>
+      
+        <table class="waffle" cellspacing="0" cellpadding="0">
+          <tbody>
+              <thead>
+              <tr style="height: 20px">
+                  
+                  <th class="s0" dir="ltr">Benchmark</th>
+                  <th class="s1" dir="ltr">Challenge</th>
+                  <th class="s0" dir="ltr">Team Rank</th>
+                  <th class="s0" dir="ltr">Winner Names</th>
+                  <th class="s0" dir="ltr">Technical Report</th>
+                  <th class="s0" dir="ltr">Code</th>
+              </tr>
+              </thead>
+              <tr style="height: 20px">
+                  
+                  <td class="s2" dir="ltr">EPIC-KITCHENS</td>
+                  <td class="s3" dir="ltr">Action Recognition</td>
+                  <td class="s4" dir="ltr">1</td>
+                  <td class="s3" dir="ltr">Shuming Liu (KAUST)*; Lin Sui (Nanjing University); Chen-Lin Zhang (Moonshot AI);
+                      Fangzhou Mu (NVIDIA); Chen Zhao (KAUST); Bernard Ghanem (KAUST)</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s2" dir="ltr">EPIC-KITCHENS</td>
+                  <td class="s3" dir="ltr">Action Recognition</td>
+                  <td class="s4" dir="ltr">2</td>
+                  <td class="s3" dir="ltr">Yingxin Xia (DeepGlint); Ninghua Yang (DeepGlint)*; Kaicheng Yang (DeepGlint);
+                      Xiang An (DeepGlint); Xiangzi Dai (DeepGlint); Weimo Deng (DeepGlint); Ziyong Feng (DeepGlint)</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s2" dir="ltr">EPIC-KITCHENS</td>
+                  <td class="s3" dir="ltr">Action Recognition</td>
+                  <td class="s4" dir="ltr">2</td>
+                  <td class="s3" dir="ltr">Yingxin Xia (DeepGlint); Ninghua Yang (DeepGlint)*; Kaicheng Yang (DeepGlint);
+                      Xiang An (DeepGlint); Xiangzi Dai (DeepGlint); Weimo Deng (DeepGlint); Ziyong Feng (DeepGlint)</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s2" dir="ltr">EPIC-KITCHENS</td>
+                  <td class="s3" dir="ltr">Action Recognition</td>
+                  <td class="s4" dir="ltr">3</td>
+                  <td class="s3" dir="ltr">Jilan Xu (Fudan University)*; Baoqi Pei (Zhejiang University); Yifei Huang (The
+                      University of Tokyo); Guo Chen (Nanjing University); Yicheng Liu (Nanjing University); Yuping He
+                      (Nanjing University); Kanghua Pan (Nanjing University); Yali Wang (Shenzhen Institutes of Advanced
+                      Technology, Chinese Academy of Sciences); Tong Lu (Nanjing University); Limin Wang (Nanjing University);
+                      Yu Qiao (Shanghai Artificial Intelligence Laboratory)</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s2" dir="ltr">EPIC-KITCHENS</td>
+                  <td class="s3" dir="ltr">Action Detection</td>
+                  <td class="s4" dir="ltr">1</td>
+                  <td class="s3" dir="ltr">Shuming Liu (KAUST)*; Lin Sui (Nanjing University); Chen-Lin Zhang (Moonshot AI);
+                      Fangzhou Mu (NVIDIA); Chen Zhao (KAUST); Bernard Ghanem (KAUST)</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s2" dir="ltr">EPIC-KITCHENS</td>
+                  <td class="s3" dir="ltr">Action Detection</td>
+                  <td class="s4" dir="ltr">2</td>
+                  <td class="s3" dir="ltr">Yingxin Xia (DeepGlint); Ninghua Yang (DeepGlint)*; Kaicheng Yang (DeepGlint);
+                      Xiang An (DeepGlint); Xiangzi Dai (DeepGlint); Weimo Deng (DeepGlint); Ziyong Feng (DeepGlint)</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s2" dir="ltr">EPIC-KITCHENS</td>
+                  <td class="s3" dir="ltr">Action Detection</td>
+                  <td class="s4" dir="ltr">2</td>
+                  <td class="s3" dir="ltr">Yingxin Xia (DeepGlint); Ninghua Yang (DeepGlint)*; Kaicheng Yang (DeepGlint);
+                      Xiang An (DeepGlint); Xiangzi Dai (DeepGlint); Weimo Deng (DeepGlint); Ziyong Feng (DeepGlint)</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s2" dir="ltr">EPIC-KITCHENS</td>
+                  <td class="s3" dir="ltr">Action Detection</td>
+                  <td class="s4" dir="ltr">3</td>
+                  <td class="s3" dir="ltr">Jacob Chalk, Jaesung Huh, Evangelos Kazakos, Andrew Zisserman, Dima Damen</td>
+                  <td>Coming Soon...</td>
+                  <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s2" dir="ltr">EPIC-KITCHENS</td>
+                  <td class="s3" dir="ltr">Unsupervised Domain Adaptation for Action Recognition</td>
+                  <td class="s4" dir="ltr">1</td>
+                  <td class="s3" dir="ltr">Jilan Xu (Fudan University)*; Baoqi Pei (Zhejiang University); Yifei Huang (The
+                      University of Tokyo); Guo Chen (Nanjing University); Yicheng Liu (Nanjing University); Yuping He
+                      (Nanjing University); Kanghua Pan (Nanjing University); Yali Wang (Shenzhen Institutes of Advanced
+                      Technology, Chinese Academy of Sciences); Tong Lu (Nanjing University); Limin Wang (Nanjing University);
+                      Yu Qiao (Shanghai Artificial Intelligence Laboratory)</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s2" dir="ltr">EPIC-KITCHENS</td>
+                  <td class="s5" dir="ltr">Multi-Instance Retrieval</td>
+                  <td class="s4" dir="ltr">1</td>
+                  <td class="s3" dir="ltr">XIAOQI WANG (The Hong Kong Polytechnic University); Yi Wang (The Hong Kong
+                      Polytechnic University); Lap-Pui Chau (The Hong Kong Polytechnic University)*</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s2" dir="ltr">EPIC-KITCHENS</td>
+                  <td class="s5" dir="ltr">Multi-Instance Retrieval</td>
+                  <td class="s4" dir="ltr">2</td>
+                  <td class="s3" dir="ltr">Jilan Xu (Fudan University)*; Baoqi Pei (Zhejiang University); Yifei Huang (The
+                      University of Tokyo); Guo Chen (Nanjing University); Yicheng Liu (Nanjing University); Yuping He
+                      (Nanjing University); Kanghua Pan (Nanjing University); Yali Wang (Shenzhen Institutes of Advanced
+                      Technology, Chinese Academy of Sciences); Tong Lu (Nanjing University); Limin Wang (Nanjing University);
+                      Yu Qiao (Shanghai Artificial Intelligence Laboratory)</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s2" dir="ltr">EPIC-KITCHENS</td>
+                  <td class="s5" dir="ltr">Multi-Instance Retrieval</td>
+                  <td class="s4" dir="ltr">3</td>
+                  <td class="s3" dir="ltr">Jiamin Cao (Xidian University)*; Lingqi Wang (Xidian University); Jiayao Hao
+                      (Xidian University ); Shuyuan Yang (Xidian University); Licheng Jiao (Xidian University)</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s2" dir="ltr">EPIC-KITCHENS</td>
+                  <td class="s3" dir="ltr">Video Object Segmentation</td>
+                  <td class="s4" dir="ltr">1</td>
+                  <td class="s3" dir="ltr">Qinliang Wang (xidian university)*; xuejian Gou (xidian university); Zhongjian
+                      Huang (Xidian University); Lingling Li (Xidian University); Fang Liu (Xidian University)</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s2" dir="ltr">EPIC-KITCHENS</td>
+                  <td class="s3" dir="ltr">Video Object Segmentation</td>
+                  <td class="s4" dir="ltr">2</td>
+                  <td class="s3" dir="ltr">Sen Jia (Xidian University)*; Xinyue Yu (Xidian University); Long Sun (Xidian
+                      University); Licheng Jiao (Xidian University); Shuyuan Yang (Xidian University)</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s2" dir="ltr">EPIC-KITCHENS</td>
+                  <td class="s3" dir="ltr">Video Object Segmentation</td>
+                  <td class="s4" dir="ltr">3</td>
+                  <td class="s3" dir="ltr">Libo Yan (Xidian University)*; Shizhan Zhao (Xidian University); Zhang Yanzhao
+                      (Xidian University); Xu Liu (Xidian University); Puhua Chen (Xidian University)</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s2" dir="ltr">EPIC-KITCHENS</td>
+                  <td class="s3" dir="ltr">Audio-Based Interaction Recognition</td>
+                  <td class="s4" dir="ltr">1</td>
+                  <td class="s3" dir="ltr">Lingqi Wang (Xidian University)*; Jiamin Cao (Xidian University); xuejian Gou
+                      (xidian university); Lingling Li (Xidian University); Fang Liu (Xidian University)</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s2" dir="ltr">EPIC-KITCHENS</td>
+                  <td class="s3" dir="ltr">Audio-Based Interaction Recognition</td>
+                  <td class="s4" dir="ltr">2</td>
+                  <td class="s3" dir="ltr">Jacob Chalk, Jaesung Huh, Evangelos Kazakos, Andrew Zisserman, Dima Damen</td>
+                  <td>Coming Soon...</td>
+                  <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s2" dir="ltr">EPIC-KITCHENS</td>
+                  <td class="s3" dir="ltr">Audio-Based Interaction Recognition</td>
+                  <td class="s4" dir="ltr">3</td>
+                  <td class="s3" dir="ltr">Shizhan Zhao (Xidian University)*; Libo Yan (Xidian University); Zhang Yanzhao
+                      (Xidian University); Licheng Jiao (Xidian University); Xu Liu (Xidian University); Yuwei Guo (Xidian
+                      University)</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s2" dir="ltr">EPIC-KITCHENS</td>
+                  <td class="s3" dir="ltr">Audio-Based Interaction Detection</td>
+                  <td class="s4" dir="ltr">1</td>
+                  <td class="s3" dir="ltr">Shuming Liu (KAUST)*; Lin Sui (Nanjing University); Chen-Lin Zhang (Moonshot AI);
+                      Fangzhou Mu (NVIDIA); Chen Zhao (KAUST); Bernard Ghanem (KAUST)</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s2" dir="ltr">EPIC-KITCHENS</td>
+                  <td class="s3" dir="ltr">Audio-Based Interaction Detection</td>
+                  <td class="s4" dir="ltr">2</td>
+                  <td class="s3" dir="ltr">Jacob Chalk, Jaesung Huh, Evangelos Kazakos, Andrew Zisserman, Dima Damen</td>
+                  <td>Coming Soon...</td>
+                  <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s2" dir="ltr">EPIC-KITCHENS</td>
+                  <td class="s3" dir="ltr">Audio-Based Interaction Detection</td>
+                  <td class="s4" dir="ltr">3</td>
+                  <td class="s3" dir="ltr">xuejian Gou (xidian university)*; Qinliang Wang (xidian university); Jiamin Cao
+                      (Xidian University); Lingling Li (Xidian University); Fang Liu (Xidian University)</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s2 softmerge" dir="ltr">
+                      <div class="softmerge-inner" style="width:148px;left:-1px">HoloAssist - Mistake Detection</div>
+                  </td>
+                  <td class="s6" dir="ltr">Mistake Detection</td>
+                  <td class="s4" dir="ltr">1</td>
+                  <td class="s2" dir="ltr">Michele Mazzamuto (University of Catania), Antonino Furnari (University of
+                      Catania), and Giovanni Maria Farinella (University of Catania)</td>
+                      <td><a href="https://drive.google.com/file/d/14zCZ2IBp9hiejmv7ypvZLXz3VvYjPH7h/view?usp=sharing" target="_blank">Link</a></td>
+                      <td><a href="https://github.com/Mikes95/Mistake_Detection_holoassist/" target="_blank">Link</a></td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s2 softmerge" dir="ltr">
+                      <div class="softmerge-inner" style="width:148px;left:-1px">HoloAssist - Action Recognition</div>
+                  </td>
+                  <td class="s6" dir="ltr">Fine-grained action recognition task</td>
+                  <td class="s4" dir="ltr">1</td>
+                  <td class="s2" dir="ltr">Artem Merinov (Free University of Bozen-Bolzano), Oswald Lanz (Free University of
+                      Bozen-Bolzano)</td>
+                      <td><a href="https://drive.google.com/file/d/1MqYUdSJQZTmwE4c2Sgh_rgGGyfq6yasS/view?usp=sharing" target="_blank">Link</a></td>
+                      <td> - </td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s7">Ego-Exo4D</td>
+                  <td class="s8" dir="ltr">Ego-Pose Hands</td>
+                  <td class="s9">1</td>
+                  <td class="s7">Feng Chen, Lenovo Research<br>Ling Ding, Lenovo Research<br>Kanokphan Lertniphonphan, Lenovo
+                      Research <br>Jian Li, Lenovo Research <br>Kaer Huang, Lenovo Research<br>Zhepeng Wang, Lenovo Research
+                  </td>
+                  <td>Coming Soon...</td>
+                  <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s7">Ego-Exo4D</td>
+                  <td class="s8" dir="ltr">Ego-Pose Hands</td>
+                  <td class="s9">2</td>
+                  <td class="s7">Georgios Pavlakos, UT Austin<br>Dandan Shan, University of Michigan<br>Ilija Radosavovic, UC
+                      Berkeley<br>Angjoo Kanazawa, UC Berkeley<br>David Fouhey, New York University<br>Jitendra Malik, UC
+                      Berkeley</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s7">Ego-Exo4D</td>
+                  <td class="s8" dir="ltr">Ego-Pose Hands</td>
+                  <td class="s9">3</td>
+                  <td class="s7">Baoqi Pei, Zhejiang University, Shanghai AI Laboratory <br>Yifei Huang, University of Tokyo,
+                      Shanghai AI Laboratory <br>Guo Chen, Nanjing University, Shanghai AI Laboratory <br>Jilan Xu, Fudan
+                      University, Shanghai AI Laboratory<br>Yicheng Liu, Nanjing University<br>Yuping He, Nanjing
+                      University<br>Kanghua Pan, Nanjing University<br>Tong Lu, Nanjing University<br>Yali Wang, Shenzhen
+                      Institute of Advanced Technology, Shanghai AI Laboratory<br>Limin Wang, Nanjing University, Shanghai AI
+                      Laboratory <br>Yu Qiao, Shanghai AI Laboratory<br></td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s7">Ego-Exo4D</td>
+                  <td class="s8" dir="ltr">Ego-Pose Body</td>
+                  <td class="s9">1</td>
+                  <td class="s7">Jilan Xu, Fudan University, Shanghai AI Laboratory <br>Yifei Huang, University of Tokyo,
+                      Shanghai AI Laboratory <br>Guo Chen, Nanjing University, Shanghai AI Laboratory <br>Baoqi Pei, Zhejiang
+                      University, Shanghai AI Laboratory <br>Yicheng Liu, Nanjing University <br>Yuping He, Nanjing
+                      University<br>Kanghua Pan, Nanjing University<br>Tong Lu, Nanjing University<br>Yali Wang, Shenzhen
+                      Institute of Advanced Technology, Shanghai AI Laboratory<br>Limin Wang, Nanjing University, Shanghai AI
+                      Laboratory<br>Yu Qiao, Shanghai AI Laboratory <br></td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s7">Ego-Exo4D</td>
+                  <td class="s8" dir="ltr">Ego-Pose Body</td>
+                  <td class="s9">3</td>
+                  <td class="s7">Congsheng Xu, Shanghai Jiaotong University</td>
+                  <td>Coming Soon...</td>
+                  <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s7">Ego-Exo4D</td>
+                  <td class="s8" dir="ltr">Ego-Pose Body</td>
+                  <td class="s9">2</td>
+                  <td class="s7">Brent Yi, UC Berkeley<br>Vickie Ye, UC Berkeley<br>Georgios Pavlakos, UT Austin<br>Lea
+                      Müller, UC Berkeley<br>Maya Zheng, UC Berkeley <br>Yi Ma, UC Berkeley<br>Jitendra Malik, UC
+                      Berkeley<br>Angjoo Kanazawa, UC Berkeley </td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s7">Ego4D</td>
+                  <td class="s10" dir="ltr">Goal Step</td>
+                  <td class="s9">1</td>
+                  <td class="s7">Carlos Plou, Universidad de Zaragoza<br>Lorenzo Mur-Labadia, University of Zaragoza<br>Ruben
+                      Martinez-Cantin, University of Zaragoza<br>Ana Murillo, Universidad de Zaragoza</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s7">Ego4D</td>
+                  <td class="s10" dir="ltr">Goal Step</td>
+                  <td class="s9">2</td>
+                  <td class="s7">Yuping He, Nanjing University<br>Guo Chen, Nanjing University, Shanghai AI
+                      Laboratory<br>Baoqi Pei, Zhejiang University, Shanghai AI Laboratory<br>Yicheng Liu, Nanjing
+                      University<br>Kanghua Pan, Nanjing University<br>Jilan Xu, Fudan University, Shanghai AI Laboratory
+                      <br>Yifei Huang, University of Tokyo, Shanghai AI Laboratory <br>Yali Wang, Shenzhen Institute of
+                      Advanced Technology, Shanghai AI Laboratory <br>Tong Lu, Nanjing University<br>Limin Wang, Nanjing
+                      University, Shanghai AI Laboratory <br>Yu Qiao, Shanghai AI Laboratory</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s7">Ego4D</td>
+                  <td class="s10" dir="ltr">Moments Queries</td>
+                  <td class="s9">2</td>
+                  <td class="s7">Kanghua Pan, Nanjing University <br>Yuping He, Nanjing University <br>Guo Chen, Nanjing
+                      University, Shanghai AI Laboratory <br>Baoqi Pei, Zhejiang University, Shanghai AI Laboratory
+                      <br>Yicheng Liu, Nanjing University <br>Jilan Xu, Fudan University, Shanghai AI Laboratory <br>Yifei
+                      Huang, University of Tokyo, Shanghai AI Laboratory<br>Yali Wang, Shenzhen Institute of Advanced
+                      Technology, Shanghai AI Laboratory <br>Tong Lu, Nanjing University <br>Limin Wang, Nanjing University,
+                      Shanghai AI Laboratory (1,6)<br>Yu Qiao, Shanghai AI Laboratory<br></td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s7">Ego4D</td>
+                  <td class="s10" dir="ltr">Natural Language Queries</td>
+                  <td class="s9">1</td>
+                  <td class="s7">Yuping He, Nanjing University<br>Guo Chen, Nanjing University, Shanghai AI Laboratory
+                      <br>Baoqi Pei, Zhejiang University, Shanghai AI Laboratory <br>Yicheng Liu, Nanjing
+                      University<br>Kanghua Pan, Nanjing University<br>Jilan Xu, Fudan University, Shanghai AI Laboratory
+                      <br>Yifei Huang, University of Tokyo, Shanghai AI Laboratory<br>Yali Wang, Shenzhen Institute of
+                      Advanced Technology, Shanghai AI Laboratory <br>Tong Lu, Nanjing University<br>Limin Wang, Nanjing
+                      University, Shanghai AI Laboratory <br>Yu Qiao,Shanghai AI Laboratory<br></td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s7">Ego4D</td>
+                  <td class="s10" dir="ltr">Short-term Object Interaction Anticipation</td>
+                  <td class="s9">1</td>
+                  <td class="s7">Guo Chen, Nanjing University, Shanghai AI Laboratory <br>Yuping He, Nanjing University
+                      <br>Baoqi Pei, Zhejiang University, Shanghai AI Laboratory <br>Yicheng Liu, Nanjing
+                      University<br>Kanghua Pan, Nanjing University <br>Jilan Xu, Fudan University, Shanghai AI Laboratory
+                      <br>Yifei Huang, University of Tokyo, Shanghai AI Laboratory<br>Yali Wang, Shenzhen Institute of
+                      Advanced Technology Shanghai AI Laboratory<br>Tong Lu, Nanjing University <br>Limin Wang, Nanjing
+                      University, Shanghai AI Laboratory<br>Yu Qiao, Shanghai AI Laboratory<br></td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s7">Ego4D</td>
+                  <td class="s10" dir="ltr">Long-term Action Anticipation</td>
+                  <td class="s9">1</td>
+                  <td class="s7">Yicheng Liu, Nanjing University <br>Guo Chen, Nanjing University, Shanghai AI Laboratory
+                      <br>Yuping He, Nanjing University<br>Baoqi Pei, Zhejiang University, Shanghai AI Laboratory <br>Kanghua
+                      Pan, Nanjing University<br>Jilan Xu, Fudan University, Shanghai AI Laboratory <br>Yifei Huang,
+                      University of Tokyo, Shanghai AI Laboratory<br>Yali Wang, Shenzhen Institute of Advanced Technology,
+                      Shanghai AI Laboratory <br>Tong Lu, Nanjing University <br>Limin Wang, Nanjing University, Shanghai AI
+                      Laboratory <br>Yu Qiao, Shanghai AI Laboratory <br></td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s7">Ego4D</td>
+                  <td class="s10" dir="ltr">Ego Schema</td>
+                  <td class="s9">2</td>
+                  <td class="s7">Noriyuki Kugo, Panasonic Connect<br>Tatsuya Ishibashi, Panasonic Connect<br>Kosuke Ono,
+                      Panasonic Connect<br>Yuji Sato, Panasonic Connect </td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s7">Ego4D</td>
+                  <td class="s10" dir="ltr">Ego Schema</td>
+                  <td class="s9">3</td>
+                  <td class="s7">Ying Wang, NYU<br>Yanlai Yang, NYU<br>Mengye Ren, NYU</td>
+                  <td>Coming Soon...</td>
+                  <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s7">Ego4D</td>
+                  <td class="s10" dir="ltr">Ego Schema</td>
+                  <td class="s9">1</td>
+                  <td class="s7">Haoyu Zhang, Harbin Institute of Technology, <br>Yuquan Xie, Harbin Institute of
+                      Technology<br>Yisen Feng, Harbin Institute of Technology<br>Zaijing Li, Harbin Institute of
+                      Technology<br>Meng Liu, Shandong Jianzhu University<br>Liqiang Nie, Harbin Institute of Technology </td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s7">Ego4D</td>
+                  <td class="s10" dir="ltr">Long-term Action Anticipation</td>
+                  <td class="s9">2</td>
+                  <td class="s7">Zeyun Zhong, Karlsruhe Institute of Technology<br>Manuel Martin, Fraunhofer IOSB<br>Dr.
+                      Frederik Diederichs, Fraunhofer IOSB<br>Jürgen Beyerer, Fraunhofer IOSB</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s7">Ego4D</td>
+                  <td class="s10" dir="ltr">Looking at Me</td>
+                  <td class="s9">2</td>
+                  <td class="s7">Xin Li, University of Science and Technology Beijing<br>Xu Han, University of Science and
+                      Technology Beijing<br>Bochao Zou, University of Science and Technology Beijing<br>Huimin Ma, University
+                      of Science and Technology Beijing</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s7">Ego4D</td>
+                  <td class="s10" dir="ltr">Looking at Me</td>
+                  <td class="s9">1</td>
+                  <td class="s7">Kanokphan Lertniphonphan, Lenovo Research<br>Jun Xie, Lenovo Research<br>Yaqing Meng, Chinese
+                      Academy of Sciences<br>Shijing Wang, Beijing Jiaotong University<br>Feng Chen, Lenovo
+                      Research<br>Zhepeng Wang, Lenovo Research</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s7">Ego4D</td>
+                  <td class="s10" dir="ltr">Moments Queries</td>
+                  <td class="s9">1</td>
+                  <td class="s7">Shuming Liu, King Abdullah University of Science and Technology <br>Chen-Lin Zhang, Moonshot
+                      AI<br>Fangzhou Mu, NVIDIA<br>Bernard Ghanem, King Abdullah University of Science and Technology</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s7">Ego4D</td>
+                  <td class="s10" dir="ltr">Natural Language Queries</td>
+                  <td class="s9">2</td>
+                  <td class="s7">Haoyu Zhang, Harbin Institute of Technology, <br>Yuquan Xie, Harbin Institute of
+                      Technology<br>Yisen Feng, Harbin Institute of Technology<br>Zaijing Li, Harbin Institute of
+                      Technology<br>Meng Liu, Shandong Jianzhu University<br>Liqiang Nie, Harbin Institute of Technology </td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s11"></td>
+                  <td class="s10" dir="ltr">Goal Step</td>
+                  <td class="s9">3</td>
+                  <td class="s7">Haoyu Zhang, Harbin Institute of Technology, <br>Yuquan Xie, Harbin Institute of
+                      Technology<br>Yisen Feng, Harbin Institute of Technology<br>Zaijing Li, Harbin Institute of
+                      Technology<br>Meng Liu, Shandong Jianzhu University<br>Liqiang Nie, Harbin Institute of Technology </td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s7">Ego4D</td>
+                  <td class="s10" dir="ltr">Short-term Object Interaction Anticipation</td>
+                  <td class="s9">3</td>
+                  <td class="s7">Hyunjin Cho, Department of ECE, Seoul National University<br>Dong Un Kang, Department of ECE,
+                      Seoul National University<br>Se Young Chun, Department of ECE, Seoul National University</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s7">Ego4D</td>
+                  <td class="s10" dir="ltr">Short-term Object Interaction Anticipation</td>
+                  <td class="s9">2</td>
+                  <td class="s7">Lorenzo Mur-Labadia, University of Zaragoza<br>Jose Guerrero, Universidad de
+                      Zaragoza<br>Ruben Martinez-Cantin, University of Zaragoza<br>Giovanni Maria Farinella, University of
+                      Catania</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s7">Ego4D</td>
+                  <td class="s10" dir="ltr">Visual Queries 2D</td>
+                  <td class="s9">1</td>
+                  <td class="s7">Baoqi Pei, Zhejiang University, Shanghai AI Laboratory <br>Yifei Huang, University of Tokyo,
+                      Shanghai AI Laboratory <br>Guo Chen, Nanjing University, Shanghai AI Laboratory <br>Jilan Xu, Fudan
+                      University, Shanghai AI Laboratory<br>Yicheng Liu, Nanjing University<br>Yuping He, Nanjing
+                      University<br>Kanghua Pan, Nanjing University<br>Tong Lu, Nanjing University<br>Yali Wang, Shenzhen
+                      Institute of Advanced Technology, Shanghai AI Laboratory<br>Limin Wang, Nanjing University, Shanghai AI
+                      Laboratory <br>Yu Qiao, Shanghai AI Laboratory <br></td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s7">Ego4D</td>
+                  <td class="s10" dir="ltr">Visual Queries 3D</td>
+                  <td class="s9">2</td>
+                  <td class="s7">Jilan Xu, Fudan University, Shanghai AI Laboratory <br>Yifei Huang, University of Tokyo,
+                      Shanghai AI Laboratory <br>Guo Chen, Nanjing University, Shanghai AI Laboratory <br>Baoqi Pei, Zhejiang
+                      University, Shanghai AI Laboratory <br>Yicheng Liu, Nanjing University <br>Yuping He, Nanjing University
+                      <br>Kanghua Pan, Nanjing University <br>Tong Lu, Nanjing University<br>Yali Wang, Shenzhen Institute of
+                      Advanced Technology, Shanghai AI Laboratory<br>Limin Wang, Nanjing University <br>Yu Qiao, Shanghai AI
+                      Laboratory<br></td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+              <tr style="height: 20px">
+                  
+                  <td class="s7">Ego4D</td>
+                  <td class="s10" dir="ltr">Visual Queries 3D</td>
+                  <td class="s9">1</td>
+                  <td class="s7">Jinjie Mai, KAUST<br>Abdullah Hamdi, KAUST<br>Chen Zhao, KAUST<br>Silvio Giancola,
+                      KAUST<br>Bernard Ghanem, KAUST</td>
+                      <td>Coming Soon...</td>
+                      <td>Coming Soon...</td>
+              </tr>
+          </tbody>
+      </table>
+      
+      </div>
+    </div>
+  </section>
+
+
+  <section id="cfp">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 align-center">
+          <h3 class="title large-text">Call for Abstracts</h3>
+        </div>
+      </div>
+      <p class="justified">
+        You are invited to submit extended abstracts to the first
+        edition of joint egocentric vision workshop which will be held
+        alongside <a href="https://cvpr.thecvf.com">CVPR 2024</a> in Seattle.
+        </p>
+        <p class=" justified">
+          These abstracts represent existing or ongoing work and will not be
+          published as part of any proceedings. We welcome all works that focus
+          within the Egocentric Domain, it is not necessary to use the Ego4D
+          dataset within your work. We expect a submission may contain one or
+          more of the following topics (this is a non-exhaustive list):
+      </p>
+      <ul class="cfp">
+        <li>Egocentric vision for human activity analysis and understanding, including action recognition, action detection, audio-visual action perception and object state change detection</li>
+        <li>Egocentric vision for anticipating human behaviour, actions and objects</li>
+        <li>Egocentric vision for 3D perception and interaction, including dynamic scene reconstruction, hand-object reconstruction, long-term object tracking, NLQ and visual queries, long-term video understanding</li>
+        <li>Head-mounted eye tracking and gaze estimation including attention modelling and next fixation prediction</li>
+        <li>Egocentric vision for object/event recognition and retrieval</li>
+        <li>Egocentric vision for summarization</li>
+        <li>Daily life and activity monitoring</li>
+        <li>Egocentric vision for human skill learning, assistance, and robotics</li>
+        <li>Egocentric vision for social interaction and human behaviour understanding</li>
+        <li>Privacy and ethical concerns with wearable sensors and egocentric vision</li>
+        <li>Egocentric vision for health and social good</li>
+        <li>Symbiotic human-machine vision systems, human-wearable devices interaction</li>
+        <li>Interactive AR/VR and Egocentric online/real-time perception</li>
+      </ul>
+      <h3 class="small-title">Format</h3>
+      <p class="justified">
+        The length of the extended abstracts is 2-4 pages, including figures,
+        tables, and references. We invite submissions of ongoing or
+        already published work, as well as reports on demonstrations and
+        prototypes. The 1<sup>st</sup> joint egocentric vision workshop gives opportunities
+        for authors to present their work to the egocentric community to
+        provoke discussion and feedback. Accepted work will be presented as
+        either an oral presentation (either virtual or in-person) or as a
+        poster presentation. The review will be single-blind, so there is no
+        need to anonymize your work, but otherwise will follow the format of
+        the CVPR submissions, information can be found
+        <a href="https://cvpr.thecvf.com/Conferences/2024/AuthorGuidelines">here</a>.
+        Accepted abstracts <i>will not</i> be published as part of a proceedings, so
+        can be uploaded to ArXiv etc. and the links will be provided on the
+        workshop’s webpage.
+
+        The submission will be managed with the <a target="_blank" href="https://cmt3.research.microsoft.com/EgoVis2024/">CMT website</a>.
+      </p>
+    </div>
+  </section>
+
+
+  <section id="impdates">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 align-center">
+          <h3 class="title large-text">Important Dates</h3>
+        </div>
+      </div>
+
+      <table class="dates-table">
+        <tr>
+            <td class='small-title'>Challenges Leaderboards Open</td>
+            <td>Mar 2024</td>
+        </tr>
+        <tr>
+          <td class='small-title'>Challenges Leaderboards Close</td>
+          <td>30 May 2024</td>
+        </tr>
+        <tr>
+          <td class='small-title'>Challenges Technical Reports Deadline (on CMT)</td>
+          <td>5 June 2024 (23:59 PT)</td>
+        </tr>
+        <tr>
+          <td class='small-title'>Extended Abstract Deadline</td>
+          <td>10 May 2024 (23:59 PT)</td>
+        </tr>
+        <tr>
+          <td class='small-title'>Extended Abstract Notification to Authors</td>
+          <td>29 May 2024</td>
+        </tr>
+        <tr>
+          <td class='small-title'>Extended Abstracts ArXiv Deadline</td>
+          <td>12 June 2024</td>
+        </tr>
+        <tr>
+          <td class='small-title'>Workshop Date</td>
+          <td>17 June 2024</td>
+        </tr>
+      </table>
+    </div>
+  </section>
+
+
+  <section id="program">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 align-center">
+          <h3 class="title large-text">Program</h3>
+        </div>
+      </div>
+      <div>
+        <p>
+        All dates are local to Seattle's time, PST.<br>
+        Workshop Location: Room <b>Summit 428</b>
+        </p>
+        <p>
+        <style>
+        table {
+          width: 100%;
+          border-collapse: collapse;
+        }
+
+        th, td {
+          padding: 8px;
+          text-align: left;
+          border-bottom: 1px solid #ddd;
+        }
+
+        th {
+          background-color: #f2f2f2;
+        }
+
+        tr:hover {
+          background-color: #f5f5f5;
+        }
+        </style>
+        <table style="margin-left: auto; margin-right: auto;">
+          <tr>
+            <th>Time</th>
+            <th>Event</th>
+          </tr>
+          <tr>
+            <td>09:00-09:15</td>
+            <td>Welcome and Introductions</td>
+          </tr>
+          <tr>
+            <td>09:15-09:45</td>
+            <td>Invited Keynote 1: <a href="https://rehg.org" target="_blank">Jim Rehg, University of Illinois Urbana-Champaign, US</a></td>
+          </tr>
+          <tr>
+            <td>09:45-10:20</td>
+            <td>HoloAssist Challenges</td>
+          </tr>
+          <tr>
+            <td>10:20-11:20</td>
+            <td>Coffee Break and <a href="#papers">Poster Session</a></td>
+          </tr>
+          <tr>
+            <td>11:20-11:50</td>
+            <td>Invited Keynote 2: <a href="https://dlarlus.github.io" target="_blank">Diane Larlus, Naver Labs Europe and MIAI Grenoble, FR</a></td>
+          </tr>
+          <tr>
+            <td>11:50-12:40</td>
+            <td>EPIC-KITCHENS Challenges</td>
+          </tr>
+          
+          <tr>
+            <td>12:40-13:40</td>
+            <td>Lunch Break</td>
+          </tr>
+          <tr>
+            <td>13:40-14:10</td>
+            <td>EgoVis 2022/2023 Distinguished paper Awards</td>
+          </tr>
+          <tr>
+            <td>14:10-14:40</td>
+            <td>Invited Keynote 3: <a href="https://web.stanford.edu/~mcfrank/" target="_blank">Michael C. Frank</a> &amp; <a target="_blank" href="https://www.brialong.com">Bria Long</a>, Stanford University, US</td>
+          </tr>
+          <tr>
+            <td>14:40-15:30</td>
+            <td>Project Aria Datasets & Challenges</td>
+          </tr>
+          <tr>
+            <td>15:30-16:00</td>
+            <td>Coffee Break</td>
+          </tr>
+          <tr>
+            <td>16:00-16:30</td>
+            <td>Invited Keynote 4: <a href="https://www.cs.cmu.edu/~ftorre/" target="_blank">Fernando de La Torre, Carnegie Mellon University, US</a></td>
+          </tr>
+          <tr>
+            <td>16:30-17:40</td>
+            <td>Ego4D & Ego-Exo4D Challenges</td>
+          </tr>
+          <tr>
+            <td>17:40-18:00</td>
+            <td>Conclusion</td>
+          </tr>
+        </table>
+      </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="papers">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 align-center">
+          <h3 class="title large-text">Papers</h3>
+          <p><b>Note to authors:</b> Please hang your poster following the indicated poster numbers. Posters can be put up ONLY during the poster session time (10.20 - 11.20).</p>
+          <p><b>All workshop posters are in ARCH building 4E</b></p>
+          <h4 class="small-title">Extended Abstracts</h4>
+          <table>
+            <tr>
+              <th>EgoVis Poster Number</th>
+              <th>Title</th>
+              <th>Authors</th>
+              <th>arXiv Link</th>
+            </tr>
+            <tr>
+              <th>192</th>
+              <td>On the Application of Egocentric Computer Vision to Industrial Scenarios</td>
+              <td>Vivek Prabhakar Chavan (Fraunhofer Institute); Oliver Heimann (Fraunhofer IPK); Jörg Krüger (TU-Berlin)</td>
+              <td><a href="https://arxiv.org/abs/2406.07738">link</a></td>
+            </tr>
+            <tr>
+              <th>193</th>
+              <td>Instance Tracking in 3D Scenes from Egocentric Videos</td>
+              <td>Yunhan Zhao (University of California, Irvine); Haoyu Ma (University of California, Irvine); Shu Kong (Texas A&M University); Charless Fowlkes (UC Irvine)</td>
+              <td><a href="https://arxiv.org/abs/2312.04117">link</a></td>
+            </tr>
+            <tr>
+              <th>194</th>
+              <td>The Audio-Visual Conversational Graph: From an Egocentric-Exocentric Perspective</td>
+              <td>Wenqi Jia (Georgia Institute of Technology)</td>
+              <td><a href="https://arxiv.org/abs/2312.12870">link</a></td>
+            </tr>
+            <tr>
+              <th>195</th>
+              <td>ALGO: Object-Grounded Visual Commonsense Reasoning for Open-World Egocentric Action Recognition</td>
+              <td>Sanjoy Kundu (Auburn University); Sathyanarayanan N Aakur (Auburn University); Shubham Trehan (Auburn University)</td>
+              <td><a href="https://arxiv.org/abs/2406.05722">link</a></td>
+            </tr>
+            <tr>
+              <th>196</th>
+              <td>Object Aware Egocentric Online Action Detection</td>
+              <td>Joungbin An (Yonsei University); YUNSU PARK (Yonsei University); Hyolim Kang (Yonsei University); Seon Joo Kim (Yonsei University)</td>
+              <td><a href="https://arxiv.org/abs/2406.01079">link</a></td>
+            </tr>
+            <tr>
+              <th>197</th>
+              <td>From Observation to Abstractions: Efficient In-Context Learning from Human Feedback and Visual Demonstrations for VLM Agents</td>
+              <td>Gabriel Sarch (Carnegie Mellon University); Lawrence Jang (Carnegie Mellon University); Michael J Tarr (Carnegie Mellon University); William W Cohen (Google AI); Kenneth Marino (Google DeepMind); Katerina Fragkiadaki (Carnegie Mellon University)</td>
+              <td><a href="https://ical-learning.github.io/paper.pdf">link</a></td>
+            </tr>
+            <tr>
+              <th>198</th>
+              <td>Learning Mobile Manipulation Skills via Autonomous Exploration</td>
+              <td>Russell Mendonca (Carnegie Mellon University); Deepak Pathak (Carnegie Mellon University)</td>
+              <td>Coming soon...</td>
+            </tr>
+            <tr>
+              <th>199</th>
+              <td>RMem: Restricted Memory Banks Improve Video Object Segmentation</td>
+              <td>Junbao Zhou (UIUC); Ziqi Pang (UIUC); Yu-Xiong Wang (University of Illinois at Urbana-Champaign)</td>
+              <td><a href="https://restricted-memory.github.io/static/pdfs/RMem_Arxiv.pdf">link</a></td>
+            </tr>
+            <tr>
+              <th>200</th>
+              <td>ENIGMA-51: Towards a Fine-Grained Understanding of Human Behavior in Industrial Scenarios</td>
+              <td>Francesco Ragusa (University of Catania); Rosario Leonardi (University of Catania); Michele Mazzamuto (University of Catania); Claudia Bonanno (Università degli Studi di Catania); Rosario Scavo (University of Catania); Antonino Furnari (University of Catania); Giovanni Maria Farinella (University of Catania)</td>
+              <td><a href="https://arxiv.org/abs/2309.14809">link</a></td>
+            </tr>
+            <tr>
+              <th>201</th>
+              <td>Are Synthetic Data Useful for Egocentric Hand-Object Interaction Detection?</td>
+              <td>Rosario Leonardi (University of Catania); Antonino Furnari (University of Catania); Francesco Ragusa (University of Catania); Giovanni Maria Farinella (University of Catania)</td>
+              <td><a href="https://arxiv.org/abs/2312.02672v2">link</a></td>
+            </tr>
+            <tr>
+              <th>202</th>
+              <td>Contrastive Language Video Time Pre-training</td>
+              <td>Hengyue Liu (UC Riverside); Kyle Min (Intel Labs); Hector A Valdez (Intel Corporation); Subarna Tripathi (Intel Labs)</td>
+              <td><a href="https://arxiv.org/pdf/2406.02631">link</a></td>
+            </tr>
+            <tr>
+              <th>203</th>
+              <td>Identification of Conversation Partners from Egocentric Video</td>
+              <td>Tobias Dorszewski (Technical University of Denmark); Søren Fuglsang (University Hospital of Copenhagen); Jens Hjortkjær (DTU)</td>
+              <td><a href="http://arxiv.org/abs/2406.08089">link</a></td>
+            </tr>
+            <tr>
+              <th>204</th>
+              <td>Put Myself in Your Shoes: Lifting the Egocentric Perspective from Exocentric Videos</td>
+              <td>Mi Luo (University of Texas at Austin); Zihui Xue (The University of Texas at Austin); Alex Dimakis (UT Austin); Kristen Grauman (Facebook AI Research & UT Austin)</td>
+              <td>Coming soon...</td>
+            </tr>
+            <tr>
+              <th>205</th>
+              <td>HENASY: Learning to Assemble Scene-Entities for Egocentric Video-Language Model</td>
+              <td>Khoa HV Vo (University of Arkansas); Thinh Phan (University of Arkansas); Kashu Yamazaki (University of Arkansas); Minh Q Tran (University of Arkansas); Ngan Le (University of Arkansas)</td>
+              <td><a href="https://arxiv.org/abs/2406.00307">link</a></td>
+            </tr>
+            <tr>
+              <th>206</th>
+              <td>Video Question Answering for People with Visual Impairments Using an Egocentric 360-Degree Camera</td>
+              <td>Inpyo Song (SungKyunKwan University); MinJun Joo (iislab); Joonhyung Kwon (Korea Aerospace University); Jangwon Lee (SungKyunKwan University)</td>
+              <td><a href="https://arxiv.org/abs/2405.19794">link</a></td>
+            </tr>
+            <tr>
+              <th>207</th>
+              <td>X-MIC: Cross-Modal Instance Conditioning for Egocentric Action Generalization</td>
+              <td>Anna Kukleva (MPII); Fadime Sener (University of Bonn); Edoardo Remelli (Meta); Bugra Tekin (Meta); Eric Sauser (Meta); Bernt Schiele (MPI Informatics); Shugao Ma (Meta Reality Labs)</td>
+              <td><a href="https://arxiv.org/pdf/2403.19811v1">link</a></td>
+            </tr>
+            <tr>
+              <th>208</th>
+              <td>HandFormer: Utilizing 3D Hand Pose for Egocentric Action Recognition</td>
+              <td>Md Salman Shamil (National University of Singapore); Dibyadip Chatterjee (National University of Singapore); Fadime Sener (University of Bonn); Shugao Ma (Meta Reality Labs); Angela Yao (National University of Singapore)</td>
+              <td><a href="https://arxiv.org/abs/2403.09805">link</a></td>
+            </tr>
+            <tr>
+              <th>210</th>
+              <td>Learning Spatial Features from Audio-Visual Correspondence in Egocentric Videos</td>
+              <td>Sagnik Majumder (University of Texas at Austin); Ziad Al-Halah (University of Utah); Kristen Grauman (University of Texas at Austin)</td>
+              <td><a href="https://arxiv.org/abs/2307.04760">link</a></td>
+            </tr>
+          </table>
+
+          <h4 class="small-title">Invited CVPR Papers</h4>
+          <table>
+            <tr>
+              <th>EgoVis Poster Number</th>
+              <th>Title</th>
+              <th>Authors</th>
+              <th>arXiv Link</th>
+              <th>CVPR 2024 Presentation Details</th>
+            </tr>
+            <tr>
+              <th>178</th>
+              <td>PREGO: online mistake detection in PRocedural EGOcentric videos</td>
+              <td>Alessandro Flaborea, Guido Maria D'Amely di Melendugno, Leonardo Plini, Luca Scofano, Edoardo De Matteis, Antonino Furnari, Giovanni Maria Farinella, Fabio Galasso</td>
+              <td><a href="https://arxiv.org/abs/2404.01933">link</a></td>
+              <td>Thursday, 20 June, 17:15 to 18:45</td>
+            </tr>
+            <tr>
+              <th>179</th>
+              <td>Summarize the Past to Predict the Future: Natural Language Descriptions of Context Boost Multimodal Object Interaction Anticipation</td>
+              <td>Razvan-George Pasca, Alexey Gavryushin, Muhammad Hamza, Yen-Ling Kuo, Kaichun Mo, Luc Van Gool, Otmar Hilliges, Xi Wang</td>
+              <td><a href="https://arxiv.org/abs/2301.09209">link</a></td>
+              <td>Thursday, 20 June, 17:15 to 18:45</td>
+            </tr>
+            <tr>
+              <th>180</th>
+              <td>EventEgo3D: 3D Human Motion Capture from Egocentric Event Streams</td>
+              <td>Christen Millerdurai, Hiroyasu Akada, Jian Wang, Diogo Luvizon, Christian Theobalt, Vladislav Golyanik</td>
+              <td><a href="https://arxiv.org/pdf/2404.08640">link</a></td>
+              <td>Wednesday, 19 June, 10:30 to 12:00</td>
+            </tr>
+            <tr>
+              <th>181</th>
+              <td>SoundingActions: Learning How Actions Sound from Narrated Egocentric Videos</td>
+              <td>Changan Chen, Kumar Ashutosh, Rohit Girdhar, David Harwath, Kristen Grauman</td>
+              <td><a href="https://arxiv.org/pdf/2404.05206">link</a></td>
+              <td>Friday, 21 June, 17:00 to 18:30</td>
+            </tr>
+            <tr>
+              <th>182</th>
+              <td>Action Scene Graphs for Long-Form Understanding of Egocentric Videos</td>
+              <td>Rodin Ivan, Antonino Furnari, Kyle Min, Subarna Tripathi, Giovanni Maria Farinella</td>
+              <td><a href="https://arxiv.org/pdf/2312.03391">link</a></td>
+              <td>Thursday, 20 June, 17:15 to 18:45</td>
+            </tr>
+            <tr>
+              <th>183</th>
+              <td>EgoGen: An Egocentric Synthetic Data Generator (<b>CVPR HIGHLIGHT</b>)</td>
+              <td>Gen Li, Kaifeng Zhao, Siwei Zhang, Xiaozhong Lyu, Mihai Dusmanu, Yan Zhang, Marc Pollefeys, Siyu Tang</td>
+              <td><a href="https://arxiv.org/pdf/2401.08739">link</a></td>
+              <td>Thursday, 20 June, 17:15 to 18:45</td>
+            </tr>
+            <tr>
+              <th>184</th>
+              <td>Attention-Propagation Network for Egocentric Heatmap to 3D Pose Lifting (<b>CVPR HIGHLIGHT</b>)</td>
+              <td>Taeho Kang, Youngki Lee</td>
+              <td><a href="https://arxiv.org/abs/2402.18330">link</a></td>
+              <td>Wednesday 19 June, 10:30 to 12:00</td>
+            </tr>
+            <tr>
+              <th>185</th>
+              <td>Retrieval-Augmented Egocentric Video Captioning</td>
+              <td>Jilan Xu, Yifei Huang, Junlin Hou, Guo Chen, Yuejie Zhang, Rui Feng, Weidi Xie</td>
+              <td><a href="https://arxiv.org/pdf/2401.00789">link</a></td>
+              <td>Thursday, 20 June, 10:30 to 12:00</td>
+            </tr>
+            <tr>
+              <th>190</th>
+              <td>3D Human Pose Perception from Egocentric Stereo Videos (<b>CVPR HIGHLIGHT</b>)</td>
+              <td>Hiroyasu Akada, Jian Wang, Vladislav Golyanik, Christian Theobalt</td>
+              <td><a href="https://arxiv.org/abs/2401.00889">link</a></td>
+              <td>Wednesday 19 June, 10:30 to 12:00</td>
+            </tr>
+            <tr>
+              <th>187</th>
+              <td>A Backpack Full of Skills: Egocentric Video Understanding with Diverse Task Perspectives</td>
+              <td>Simone Alberto Peirone, Francesca Pistilli, Antonio Alliegro, Giuseppe Averta</td>
+              <td><a href="https://arxiv.org/pdf/2403.03037">link</a></td>
+              <td>Thursday, 20 June, 17:15 to 18:45</td>
+            </tr>
+            <tr>
+              <th>188</th>
+              <td>Egocentric Full Body Motion Capture with FisheyeViT and Diffusion-Based Motion Refinement</td>
+              <td>Jian Wang, Zhe Cao, Diogo Luvizon, Lingjie Liu, Kripasindhu Sarkar, Danhang Tang, Thabo Beeler, Christian Theobalt</td>
+              <td><a href="https://arxiv.org/pdf/2311.16495">link</a></td>
+              <td>Wednesday 19 June, 10:30 to 12:00</td>
+            </tr>
+            <tr>
+              <th>189</th>
+              <td>Single-to-Dual-View Adaptation for Egocentric 3D Hand Pose Estimation</td>
+              <td>Ruicong Liu, Takehiko Ohkawa, Mingfang Zhang, Yoichi Sato</td>
+              <td><a href="https://arxiv.org/pdf/2403.04381">link</a></td>
+              <td>Wednesday 19 June, 10:30 to 12:00</td>
+            </tr>
+            <tr>
+              <th>186</th>
+              <td>EgoExoLearn: A Dataset for Bridging Asynchronous Ego- and Exo-centric View of Procedural Activities in Real World</td>
+              <td>Yifei Huang, Guo Chen, Jilan Xu, Mingfang Zhang, Lijin Yang, Baoqi Pei, Hongjie Zhang, Lu Dong, Yali Wang, Limin Wang, Yu Qiao</td>
+              <td><a href="https://arxiv.org/pdf/2403.16182">link</a></td>
+              <td>Friday, 21 June, 10:30 to 12:00</td>
+            </tr>
+            <tr>
+              <th>191</th>
+              <td>EgoThink: Evaluating First-Person Perspective Thinking Capability of Vision-Language Models (<b>CVPR HIGHLIGHT</b>)</td>
+              <td>Sijie Cheng, Zhicheng Guo, Jingwen Wu, Kechen Fang, Peng Li, Huaping Liu, Yang Liu</td>
+              <td><a href="https://arxiv.org/pdf/2311.15596">link</a></td>
+              <td>Thursday, 20 June, 10:30 to 12:00</td>
+            </tr>
+            <tr>
+              <th>193</th>
+              <td>Instance Tracking in 3D Scenes from Egocentric Videos</td>
+              <td>Yunhan Zhao (University of California, Irvine); Haoyu Ma (University of California, Irvine); Shu Kong (Texas A&M University); Charless Fowlkes (UC Irvine)</td>
+              <td><a href="https://arxiv.org/abs/2312.04117">link</a></td>
+              <td>Thursday, 21 June, 10:30 to 12:00</td>
+            </tr>
+            <tr>
+              <th>207</th>
+              <td>X-MIC: Cross-Modal Instance Conditioning for Egocentric Action Generalization</td>
+              <td>Anna Kukleva (MPII); Fadime Sener (University of Bonn); Edoardo Remelli (Meta); Bugra Tekin (Meta); Eric Sauser (Meta); Bernt Schiele (MPI Informatics); Shugao Ma (Meta Reality Labs)</td>
+              <td><a href="https://arxiv.org/pdf/2403.19811v1">link</a></td>
+              <td>Thursday, 21 June, 17:15 to 18:45</td>
+            </tr>
+            <tr>
+              <th>210</th>
+              <td>Learning Spatial Features from Audio-Visual Correspondence in Egocentric Videos</td>
+              <td>Sagnik Majumder (University of Texas at Austin); Ziad Al-Halah (University of Utah); Kristen Grauman (University of Texas at Austin)</td>
+              <td><a href="https://arxiv.org/abs/2307.04760">link</a></td>
+              <td>Thursday, 21 June, 17:15 to 18:45</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section id="invited">
+    <div class="align-center">
+      <h3 class="title large-text">Invited Speakers</h3>
+    </div>
+    <div class="container">
+      <div class="row align-items-center md-flip-order">
+        <div class="col-xs-12">
+          <div class="consortium_logos">
+            
+            <div class="image">
+              <img src="assets/images/jim.jpg" alt="" title="" /><br /><a class="slide-text"
+                href="https://rehg.org">Jim Rehg</a>
+              <p class="slide-text" style="text-align: center">University of Illinois Urbana-Champaign, USA</p>
+              
+            </div>
+            <div class="image">
+              <img src="assets/images/diane.jpg" alt="" title="" /><br /><a class="slide-text"
+                href="https://dlarlus.github.io">Diane Larlus</a>
+              <p class="slide-text" style="text-align: center">Naver Labs Europe and MIAI Grenoble</p>
+              
+            </div>
+            <div class="image">
+              <img src="assets/images/fer1.jpg" alt="" title="" /><br /><a class="slide-text"
+                href="https://www.cs.cmu.edu/~ftorre/">Fernando De la Torre</a>
+              <p class="slide-text" style="text-align: center">Carnegie Mellon University, USA</p>
+              
+            </div>
+            <div class="image">
+              <img src="assets/images/michael.jpg" alt="" title="" /><br /><a class="slide-text"
+                href="https://web.stanford.edu/~mcfrank/">Michael C. Frank</a>
+              <p class="slide-text" style="text-align: center">Stanford University, USA</p>
+              
+            </div>
+            <div class="image">
+              <img src="assets/images/bria.jpg" alt="" title="" /><br /><a class="slide-text"
+                href="https://www.brialong.com">Bria Long</a>
+              <p class="slide-text" style="text-align: center">University of California, San Diego, USA</p>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <section id="organisers">
+    <div class="title-block align-center">
+      <h3 class="title large-text">Workshop Organisers</h3>
+    </div>
+    <div class="container">
+      <div class="row align-items-center md-flip-order">
+        <div class="col-xs-12">
+          <div class="consortium_logos">
+            <div class="image">
+              <img src="assets/images/Antonino.png" alt="" title="" /><br /><a class="slide-text"
+                href="https://www.antoninofurnari.it/">Antonino Furnari</a>
+              <p class="slide-text">University of Catania</p>
+            </div>
+            <div class="image">
+              <img src="assets/images/angela.png" alt="" title="" /><br /><a class="slide-text"
+                href="https://www.comp.nus.edu.sg/~ayao/">Angela Yao</a>
+              <p class="slide-text">National University of Singapore</p>
+            </div>
+            <div class="image">
+              <img src="assets/images/xin.jpg" alt="" title="" /><br /><a class="slide-text"
+                href="https://www.microsoft.com/en-us/research/people/wanxin/">Xin Wang</a>
+              <p class="slide-text">Microsoft Research</p>
+            </div>
+            <div class="image">
+              <img src="assets/images/tushar.jpg" alt="" title="" /><br /><a class="slide-text"
+                href="https://tushar-n.github.io">Tushar Nagarajan</a>
+              <p class="slide-text">FAIR, Meta</p>
+            </div>
+            <div class="image">
+              <img src="assets/images/huiyu.jpg" alt="" title="" /><br /><a class="slide-text"
+                href="https://csrhddlam.github.io">Huiyu Wang</a>
+              <p class="slide-text">FAIR, Meta</p>
+            </div>
+            <div class="image">
+              <img src="assets/images/jing.jpeg" alt="" title="" /><br /><a class="slide-text"
+                href="https://www.linkedin.com/in/jing-dong-24b26ab3/">Jing Dong</a>
+              <p class="slide-text">Meta</p>
+            </div>
+            <div class="image">
+              <img src="assets/images/jakob.jpeg" alt="" title="" /><br /><a class="slide-text"
+                href="https://scholar.google.com/citations?user=ndOMZXMAAAAJ&hl=en">Jakob Engel</a>
+              <p class="slide-text">FAIR, Meta</p>
+            </div>
+            <div class="image">
+              <img src="assets/images/Siddhant.jpeg" alt="" title="" /><br /><a class="slide-text"
+                href="https://sid2697.github.io/">Siddhant Bansal</a>
+              <p class="slide-text">University of Bristol</p>
+            </div>
+            <div class="image">
+              <img src="assets/images/takuma.jpg" alt="" title="" /><br /><a class="slide-text"
+                href="https://artilects.net">Takuma Yagi</a>
+              <p class="slide-text">National Institute of Advanced Industrial Science and Technology</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="co_organisers">
+    <div class="title-block align-center">
+      <h3 class="title large-text">Co-organizing Advisors</h3>
+    </div>
+    <div class="container">
+      <div class="row align-items-center md-flip-order">
+        <div class="col-xs-12">
+          <div class="consortium_logos">
+            <div class="image">
+              <img src="assets/images/Dima.jpeg" alt="" title="" /><br /><a class="slide-text"
+                href="http://people.cs.bris.ac.uk/~damen/">Dima Damen</a>
+              <p class="slide-text">University of Bristol</p>
+            </div>
+            <div class="image">
+              <img src="assets/images/Giovanni.png" alt="" title="" /><br /><a class="slide-text"
+                href="https://www.dmi.unict.it/farinella/">Giovanni Maria Farinella</a>
+              <p class="slide-text">University of Catania</p>
+            </div>
+            <div class="image">
+              <img src="assets/images/kristen.jpeg" alt="" title="" /><br /><a class="slide-text"
+                href="https://www.cs.utexas.edu/users/grauman/">Kristen Grauman</a>
+              <p class="slide-text">UT Austin</p>
+            </div>
+            <div class="image">
+              <img src="assets/images/Jitendra.jpeg" alt="" title="" /><br /><a class="slide-text"
+                href="https://people.eecs.berkeley.edu/~malik/">Jitendra Malik</a>
+              <p class="slide-text">UC Berkeley</p>
+            </div>
+            <div class="image">
+              <img src="assets/images/Richard.jpg" alt="" title="" /><br /><a class="slide-text"
+                href="https://scholar.google.co.uk/citations?user=MhowvPkAAAAJ&hl=en">Richard Newcombe</a>
+              <p class="slide-text">Reality Labs Research</p>
+            </div>
+            <div class="image">
+              <img src="assets/images/marc.jpg" alt="" title="" /><br /><a class="slide-text"
+                href="https://people.inf.ethz.ch/marc.pollefeys/">Marc Pollefeys</a>
+              <p class="slide-text">ETH Zurich</p>
+            </div>
+            <div class="image">
+              <img src="assets/images/Yoichi.jpeg" alt="" title="" /><br /><a class="slide-text"
+                href="https://sites.google.com/ut-vision.org/ysato/">Yoichi Sato</a>
+              <p class="slide-text">University of Tokyo</p>
+            </div>
+            <div class="image">
+              <img src="assets/images/David.jpeg" alt="" title="" /><br /><a class="slide-text"
+                href="https://luddy.indiana.edu/contact/profile/?David_Crandall">David Crandall</a>
+              <p class="slide-text">Indiana University</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pastevents">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 align-center">
+          <h3 class="title large-text">Related Past Events</h3>
+        </div>
+      </div>
+      <div>
+        <p>This workshop follows the footsteps of the following previous events:</p>
+        <p class="small-title"><a href="https://epic-kitchens.github.io/2023">EPIC-Kitchens</a> and <a href="https://ego4d-data.org">Ego4D</a> Past Workshops:</p>
+        <ul class="cfp">
+          <li><a href="https://ego4d-data.org/workshops/cvpr23/" target="_blank" rel="nofollow noopener noreferrer" class="external-link no-image">Ego4D&EPIC@CVPR2023: Joint International 1st Ego4D and 10th EPIC Workshop</a> in conjunction with <a href="https://cvpr2023.thecvf.com" target="_blank" rel="nofollow noopener noreferrer" class="external-link no-image">CVPR 2023</a>;</li>
+          <li><a href="https://ego4d-data.org/workshops/eccv22/">2nd International Ego4D Workshop</a> in conjunction with <a href="https://eccv2022.ecva.net">ECCV 2022</a>;</li>
+          <li><a href="https://sites.google.com/view/cvpr2022w-ego4d-epic/" target="_blank" rel="nofollow noopener noreferrer" class="external-link no-image">Ego4D&amp;EPIC@CVPR2022: Joint International 1st Ego4D and 10th EPIC Workshop</a> in conjunction with <a href="https://cvpr2022.thecvf.com" target="_blank" rel="nofollow noopener noreferrer" class="external-link no-image">CVPR 2022</a>;</li>
+          <li><a href="http://www.epic-workshop.org/EPIC_ICCV21/" target="_blank" rel="nofollow noopener noreferrer" class="external-link no-image">EPIC@ICCV21: The Ninth International Workshop on Egocentric Perception, Interaction and Computing</a> in conjunction with <a href="https://iccv2021.thecvf.com/" target="_blank" rel="nofollow noopener noreferrer" class="external-link no-image">ICCV 2021</a>;</li>
+          <li><a href="http://www.epic-workshop.org/EPIC_CVPR21/" target="_blank" rel="nofollow noopener noreferrer" class="external-link no-image">EPIC@CVPR21: The Eighth International Workshop on Egocentric Perception, Interaction and Computing</a> in conjunction with <a href="http://cvpr2021.thecvf.com/" target="_blank" rel="nofollow noopener noreferrer" class="external-link no-image">CVPR 2021</a>;</li>
+          <li><a href="http://www.epic-workshop.org/EPIC_ECCV20/" target="_blank" rel="nofollow noopener noreferrer" class="external-link no-image">EPIC@ECCV20: The Seventh International Workshop on Egocentric Perception, Interaction and Computing</a> in conjunction with <a href="https://eccv2020.eu/" target="_blank" rel="nofollow noopener noreferrer" class="external-link no-image">ECCV 2020</a>;</li>
+          <li><a href="http://www.epic-workshop.org/EPIC_CVPR20/" target="_blank" rel="nofollow noopener noreferrer" class="external-link no-image">EPIC@CVPR20: The Sixth International Workshop on Egocentric Perception, Interaction and Computing</a> in conjunction with <a href="http://cvpr2020.thecvf.com/" target="_blank" rel="nofollow noopener noreferrer" class="external-link no-image">CVPR 2020</a>;</li>
+          <li><a href="http://www.epic-workshop.org/EPIC_ICCV19/" target="_blank" rel="nofollow noopener noreferrer" class="external-link no-image">EPIC@ICCV19:  The Fifth International Workshop on Egocentric Perception, Interaction and Computing</a> in conjunction with <a href="http://iccv2019.thecvf.com/" target="_blank" rel="nofollow noopener noreferrer" class="external-link no-image">ICCV 2019</a>;</li>
+          <li><a href="http://www.epic-workshop.org/EPIC_CVPR19/" target="_blank" rel="nofollow noopener noreferrer" class="external-link no-image">EPIC@CVPR19: The Fourth International Workshop on Egocentric Perception, Interaction and Computing</a> in conjunction with <a href="http://cvpr2019.thecvf.com/" target="_blank" rel="nofollow noopener noreferrer" class="external-link no-image">CVPR 2019</a>;</li>
+          <li><a href="http://www.epic-workshop.org/EPIC_ECCV18/" target="_blank" rel="nofollow noopener noreferrer" class="external-link no-image">EPIC@ECCV18: The Third International Workshop on Egocentric Perception, Interaction and Computing</a> in conjunction with <a href="https://eccv2018.org/" target="_blank" rel="nofollow noopener noreferrer" class="external-link no-image">ECCV 2018</a>;</li>
+          <li><a href="http://www.epic-workshop.org/EPIC_ICCV17/" target="_blank" rel="nofollow noopener noreferrer" class="external-link no-image">EPIC@ICCV17: The Second International Workshop on Egocentric Perception, Interaction and Computing</a> in conjunction with <a href="http://iccv2017.thecvf.com/" target="_blank" rel="nofollow noopener noreferrer" class="external-link no-image">ICCV 2017</a>;</li>
+          <li><a href="http://www.epic-workshop.org/EPIC_ECCV16/" target="_blank" rel="nofollow noopener noreferrer" class="external-link no-image">EPIC@ECCV16: The First International Workshop on Egocentric Perception, Interaction and Computing</a> in conjunction with <a href="http://www.eccv2016.org/" target="_blank" rel="nofollow noopener noreferrer" class="external-link no-image">ECCV 2016</a>;</li>
+        </ul><br>
+          <p class="small-title">Human Body, Hands, and Activities from Egocentric and Multi-view Cameras Past Workshops:</p>
+        <ul class="cfp">
+          <li><a href="https://sites.google.com/view/egocentric-hand-body-activity">Human Body, Hands, and Activities from Egocentric and Multi-view Cameras (HBHA)</a> run alongside <a href="https://ego4d-data.org/workshops/eccv22/">ECCV 2022;</a></li><br>
+        </ul>
+        <p class="small-title"><a href="https://www.projectaria.com">Project Aria</a> Past Tutorials:</p>
+        <ul class="cfp">
+          <li>
+            <a href="https://ariatutorial2023.github.io">Aria tutorial</a> run alongside <a href="https://cvpr2023.thecvf.com">CVPR 2023</a>;
+          </li>
+          <li>
+            <a href="https://www.youtube.com/playlist?list=PLzIwronG0sE4cem9otDv_fEHXeWk0oL3f">Aria tutorial</a> run alongside <a href="https://cvpr2022.thecvf.com">CVPR 2022</a>;
+          </li>
+        </ul>
+      </div>
+  </section>
+<!--
+  <section id="qa">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 align-center">
+          <h3 class="title large-text">FAQs</h3>
+        </div>
+      </div>
+
+      <div class="timelines-container">
+        <div class="row timeline-element divider-line">
+          <div class="
+                col-lg-6
+                col-md-6
+                col-xs-11
+                col-xs-offset-1
+                col-md-offset-0
+                col-lg-offset-0
+              ">
+            <div class="timeline-text-content">
+              <h4 class="small-title">
+                Does the workshop have any proceedings?
+              </h4>
+              <p>
+                No, we will only accept extended abstracts.
+              </p>
+            </div>
+          </div>
+          <span class="timeline-point"></span>
+          <div class="timeline-data-panel col-lg-6 col-md-6"></div>
+        </div>
+
+        <div class="row timeline-element divider-line">
+          <div class="timeline-data-panel col-lg-6 col-md-6"></div>
+          <span class="timeline-point"></span>
+          <div class="
+                col-lg-6
+                col-md-6
+                col-xs-11
+                col-xs-offset-1
+                col-md-offset-0
+                col-lg-offset-0
+              ">
+            <div class="timeline-text-content">
+              <h4 class="small-title">When will the challenges open/close?</h4>
+              <p>
+                The Ego4D challenges will open in February 2023.</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+-->
+  
+
+<footer>
+  <div> EgoVis Workshop</div>
+</footer>
+</body>
+<script>
+
+  // Add code snippet for abstract toggle (https://www.w3schools.com/howto/howto_js_collapsible.asp)
+  var coll = document.getElementsByClassName("collapsible");
+  var i;
+
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function () {
+      console.log(i);
+      this.classList.toggle("active");
+      var content = this.nextElementSibling;
+      if (content.style.display === "block") {
+        content.style.display = "none";
+      } else {
+        content.style.display = "block";
+      }
+    });
+  }
+
+  // Setup nav-item on click to toggle the hamburger
+  const navbar = document.getElementById("nav-bar");
+  const hamburger_button = navbar.querySelector("button.navbar-toggler");
+  const navlist = navbar.querySelectorAll("a.nav-link").forEach((el) => {
+    el.addEventListener("click", () =
+      if (hamburger_button.ariaExpanded === "true") {
+        hamburger_button.click();
+      }
+    });
+  });
+  const parallax = document.getElementById("parallax-image");
+  const tooltip = document.getElementById("parallax-tooltip");
+  const video = document.getElementById("parallax-video");
+  const [enable, disable] = map_hover(tooltip, video, parallax);
+
+  // Intersection observer to transition header and disable onmousemove and disable tooltip
+  let intersection_options = {
+    root: null, // viewport
+    rootMargin: "0px", // No margin
+    threshold: [0.4, 0.2],
+  };
+
+  let previousThreshold = -1;
+  let observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach((_entry) => {
+      if (!_entry.isIntersecting) {
+        // If it is not intersecting, disable it.
+        disable();
+        previousThreshold = -1;
+        return;
+      }
+
+      // If intersecting, then it is either scrolling down or scrolling up.
+      if (previousThreshold === -1) {
+        previousThreshold = _entry.intersectionRatio;
+        return;
+      }
+
+      if (_entry.intersectionRatio > previousThreshold) {
+        // Going up
+        enable();
+      } else {
+        // Going down
+        disable();
+      }
+      previousThreshold = -1;
+    });
+  }, intersection_options);
+  observer.observe(parallax);
+
+  // Setup map hover
+  enable();
+</script>
+
+</html>
