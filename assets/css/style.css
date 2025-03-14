@@ -1483,3 +1483,46 @@ p{
 .btn.collapsible.active {
   background-color: #ccc; /* Darker grey */
 }
+
+.challenge-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center; /* Center the cards horizontally */
+  max-width: 1040px; /* Adjust based on your layout */
+  margin: 0 auto; /* Center the container on the page */
+  }
+  .challenge-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: calc(50% - 10px); /* 2 columns with gap */
+    max-width: 500px; /* Limit card width */
+    min-width: 300px; /* Ensure a minimum width */
+    flex: 1; /* Ensure equal distribution of space */
+  }
+  .challenge-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+  }
+  .challenge-track {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 10px;
+  }
+  .challenge-details {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+  }
+  .challenge-link {
+    margin-top: 10px;
+    display: inline-block;
+    padding: 8px 12px;
+    background: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+  }
