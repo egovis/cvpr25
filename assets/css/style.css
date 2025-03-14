@@ -481,7 +481,8 @@ a.btn-translucent {
 
 .card-title {
   color: #61abec;
-  margin-bottom: 7px;
+  margin-top: 5px;
+  margin-bottom: 2px;
   font-weight: 600;
   position: relative;
   z-index: 5;
@@ -1263,7 +1264,7 @@ footer {
 
 @media (max-width: 1024px) {
   .card-image img {
-    max-width: 75px;
+    max-width: 100px;
     max-height: 100%;
   }
 
